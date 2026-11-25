@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-25T21:54:39Z",
+  "checked_at": "2026-11-25T22:51:20Z",
   "count": 1037,
   "advisory_count": 499,
   "linked_advisory_count": 499,
   "source_park_count": 1052,
   "source_advisory_count": 499,
-  "sha256": "333bf46a7e1ffcaa47e1d782e1ce6b6627b44ee001f829908c3920cdaa942cf7",
+  "sha256": "27b64d2fc2999e35263ba7b5c0f5214e9b804bbce5474cae1b6ad4af1664ee31",
   "source": "https://bcparks.ca/active-advisories/"
 }
