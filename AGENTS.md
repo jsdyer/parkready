@@ -2,15 +2,15 @@
 
 - Keep app source in `web/`, build code in `scripts/`, and meaningful tests in `tests/`.
   Never commit `dist/`. Do not add dependencies without a concrete application need.
-- Run `scripts/init.py` as documented in README, then replace the example UI,
-  behaviour, tests and privacy text. Review all fields in `tool.json`.
+- Park Ready is initialized. Keep its official source semantics, browser app and
+  metadata consistent; do not run template initialization over this application.
 - Build for expandable personal use: keep watchlists, preset queries, source
   selections and tunable limits in a documented configuration file. Defaults are
   starting points; accept arbitrary valid visitor input when the source permits it.
   Derive counts, filters and validation from actual data, never a starter list's
   length. Test adding an item beyond the defaults. Preserve earlier captures with
   different coverage and clearly show the selected capture date. The README must
-  explain the exact edit, refresh and publication steps under Expand or customize.
+  explain the exact edit, refresh and publication steps under Publication and maintenance.
 - Keep `access: "browser"` for the usable web tool. Selecting local files is not
   installation. The hub renders its standard access label from this field.
 - Keep assets and imports relative so the app works at `/<repo>/`. Do not add a
@@ -21,7 +21,7 @@
   default. Namespace preferences as `coolcode:<tool-id>:<key>`; paths share storage.
 - Run `node --test tests/*.test.mjs`, `python3 -m unittest discover -s tests -v`,
   and `python3 scripts/build.py`. Preview `dist/` using a local HTTP server.
-- Update `tests/browser_smoke.py` when replacing the sample UI. CI runs it with
+- Update `tests/browser_smoke.py` when changing the app UI. CI runs it with
   Chromium; `tests/browser-requirements.txt` contains the test-only dependency.
 - The default build is offline. Add data refresh only when needed, with validation
   and visible source/build dates. Failed refreshes must not replace good deployments.
@@ -45,7 +45,11 @@
   deployment receipt, watchdog targets/probes/App permissions, guard and sitemap.
   Do not report a release complete with these integrations left implicit.
 
-- Give the page a concise task-based search title using `init.py --search-title`; keep
+- Give the page a concise task-based search title in `web/index.html`; keep
   the application name on the page. Retain the build-time search metadata helper,
   choose an accurate app category, and derive any Dataset metadata from real inputs.
   Never substitute a build timestamp for a source edition or fabricate ratings.
+
+- Gate dates use explicit operatingYear and calendar dates. Do not extrapolate annual
+  records or infer open/safe access from missing notices or dates. Update source
+  adapters only after verifying the public API projection, not just the CMS schema.

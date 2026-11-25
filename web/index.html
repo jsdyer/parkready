@@ -1,34 +1,167 @@
 <!doctype html>
-<html lang="en-CA">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="{{DESCRIPTION}}">
-  <title>{{TITLE}} · CoolCode</title>
-  <link rel="stylesheet" href="./style.css">
-  <script type="module" src="./app.mjs"></script>
-  {{VISIT_COUNTER}}
-</head>
-<body data-tool-id="{{TOOL_ID}}">
-  <a class="skip" href="#main">Skip to content</a>
-  <header><a href="https://coolcode.ca/">← CoolCode.ca</a><a href="{{SOURCE_URL}}">Source &amp; instructions ↗</a></header>
-  <main id="main">
-    <p class="eyebrow">Browser tool starter</p>
-    <h1>{{TITLE}}</h1>
-    <p class="intro">{{DESCRIPTION}}</p>
-    <section aria-labelledby="example-title">
-      <h2 id="example-title">Clean a list</h2>
-      <p>Trim spaces, skip blank lines and remove exact duplicates. Capitalization stays distinct.</p>
-      <div class="panels">
-        <div><label for="input">Your lines</label><textarea id="input" rows="10" maxlength="100000" spellcheck="false" placeholder="Paste one item per line"></textarea></div>
-        <div><label for="output">Cleaned lines</label><textarea id="output" rows="10" readonly spellcheck="false"></textarea></div>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="{{DESCRIPTION}}" />
+    <meta
+      name="coolcode:search-title"
+      content="BC park advisories, gate dates and facilities · Park Ready"
+    />
+    <meta name="theme-color" content="#103e38" />
+    <title>{{TITLE}}</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./app.mjs"></script>
+    {{VISIT_COUNTER}}
+  </head>
+  <body data-tool-id="{{TOOL_ID}}">
+    <a class="skip" href="#search">Skip to park search</a>
+    <header>
+      <div class="nav">
+        <a href="https://coolcode.ca/" class="home">CoolCode</a
+        ><span>BC PARKS FIELD CHECK</span
+        ><a href="{{SOURCE_URL}}">Source &amp; guide</a>
       </div>
-      <div class="actions"><button id="sample" type="button">Load example</button><button id="clear" type="button">Clear</button><button id="copy" type="button" hidden>Copy result</button></div>
-      <p id="status" role="status" aria-live="polite">Paste a list to begin.</p>
-      <noscript><p>This tool needs JavaScript to process your text. The source is available above.</p></noscript>
-    </section>
-    <aside aria-label="Privacy"><strong>Stays on your device.</strong> The browser processes your text in this tab. Reloading clears it.</aside>
-  </main>
-  <footer>Part of <a href="https://coolcode.ca/">the CoolCode collection</a>. {{ISSUE_LINK}}</footer>
-</body>
+      <div class="hero">
+        <div>
+          <p class="eyebrow">A useful check before you leave</p>
+          <h1>{{TITLE}}</h1>
+          <p class="intro">
+            Find your park. Read the notices. Check the gate dates.
+          </p>
+          <p>Official BC Parks information, gathered into one planning view.</p>
+        </div>
+        <div class="hero-mark" aria-hidden="true">
+          <svg viewBox="0 0 220 150">
+            <path d="M5 135L65 38L98 89L130 12L215 135Z" />
+            <path d="M48 65L65 38L85 70L67 59Z" class="snow" />
+            <path d="M104 65L130 12L160 57L137 43L124 50Z" class="snow" />
+            <path d="M5 140H215" class="line" />
+          </svg>
+        </div>
+      </div>
+      <div id="stats" class="stats" aria-live="polite">
+        Loading the latest saved catalogue…
+      </div>
+    </header>
+    <main>
+      <div class="source-note" id="freshness" role="status">
+        Loading source check…
+      </div>
+      <section class="controls" aria-label="Find a park">
+        <div class="searchrow">
+          <label class="searchlabel"
+            >Park name, area or activity<input
+              id="search"
+              type="search"
+              placeholder="Try Golden Ears, Nanaimo or canoeing"
+              autocomplete="off" /></label
+          ><label>Planning date<input id="date" type="date" /></label>
+        </div>
+        <div id="examples" class="examples" aria-label="Example searches"></div>
+        <div class="filterrow">
+          <label
+            >Protected area type<select id="type">
+              <option value="">All types</option>
+            </select></label
+          ><label
+            >Facility listed<select id="facility">
+              <option value="">Any facility</option>
+            </select></label
+          ><label
+            >Notices and access<select id="notice">
+              <option value="">All parks</option>
+              <option value="any">Notices for this date</option>
+              <option value="high">High-urgency notices</option>
+              <option value="closure">Closures or restrictions</option>
+              <option value="season">Outside listed gate dates</option>
+            </select></label
+          ><label class="check"
+            ><input id="saved" type="checkbox" />Saved parks
+            <span id="saved-count">0</span></label
+          ><button id="reset" class="quiet">Reset filters</button>
+        </div>
+        <p class="small">
+          Facility listings describe what a park offers; they do not confirm
+          today’s availability. Date matches use currently published notices and
+          recorded windows, not a forecast.
+        </p>
+      </section>
+      <div class="workspace">
+        <section class="results" aria-label="Park results">
+          <div class="resulthead">
+            <h2 id="count">Parks</h2>
+            <button id="export" class="quiet" disabled>Export results</button>
+          </div>
+          <div id="list"></div>
+          <button id="more" class="more" hidden>Show more parks</button>
+        </section>
+        <section
+          id="details"
+          class="details"
+          aria-label="Selected park"
+          tabindex="-1"
+        >
+          <div class="empty">
+            <span class="compass" aria-hidden="true">⌖</span>
+            <h2>Choose a park to make a plan</h2>
+            <p>
+              See published notices, seasonal gate dates and facility details
+              together. Save parks on this device for the next visit.
+            </p>
+            <p class="small">
+              No account. Your searches and saved parks stay in your browser.
+            </p>
+          </div>
+        </section>
+      </div>
+      <aside class="scope">
+        <h2>Know what this check covers</h2>
+        <p>
+          This is a dated copy of the BC Parks public catalogue, refreshed
+          hourly. It does not cover every municipal, regional or national park,
+          live road conditions, camping availability or unreported hazards. No
+          listed advisory is not an “open” or “safe” determination.
+        </p>
+        <p>
+          BC Parks says advisories are normally updated Monday–Friday, 8:30
+          am–4:30 pm, excluding statutory holidays. Check the
+          <a
+            href="https://bcparks.ca/active-advisories/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >official advisory page</a
+          >,
+          <a
+            href="https://www.emergencyinfobc.gov.bc.ca/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >EmergencyInfoBC</a
+          >
+          and
+          <a
+            href="https://www.drivebc.ca/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >DriveBC</a
+          >
+          before travel. Planning dates follow the BC Parks date convention
+          (UTC−7).
+        </p>
+        <p>
+          Searches, date choices and favourites are processed locally. Saving a
+          park stores its public park ID on this device. Official links and map
+          links open external sites only when clicked.
+          <button id="clear-saved" class="textbutton">Clear saved parks</button>
+        </p>
+        <p id="storage-status" role="status" class="small"></p>
+      </aside>
+    </main>
+    <footer>
+      <a href="https://coolcode.ca/">More CoolCode tools</a
+      ><a href="{{SOURCE_URL}}">Documentation</a>{{ISSUE_LINK}}<span
+        >Source: BC Parks · Independent tool, not a BC Parks service</span
+      >
+    </footer>
+  </body>
 </html>

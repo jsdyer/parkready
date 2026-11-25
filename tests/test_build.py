@@ -14,6 +14,7 @@ class BuildTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         shutil.copytree(ROOT / "web", self.root / "web")
+        shutil.copytree(ROOT / "data", self.root / "data")
         shutil.copyfile(ROOT / "tool.json", self.root / "tool.json")
         shutil.copyfile(ROOT / "README.md", self.root / "README.md")
 
@@ -47,6 +48,11 @@ class BuildTests(unittest.TestCase):
                 self.assertEqual('/assets/tool-metrics.js' in page, enabled)
                 self.assertEqual(f'https://coolcode.ca/report/?tool={slug}' in page, enabled)
                 self.assertNotIn("{{", page)
+
+    def test_rejects_inconsistent_snapshot(self):
+        (self.root / 'data/index.json').write_text('{}')
+        with self.assertRaisesRegex(ValueError, 'Snapshot'):
+            build(self.root)
 
     def test_url_matches_tool_id(self):
         self.edit(url="/different/")

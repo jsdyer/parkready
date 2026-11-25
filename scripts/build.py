@@ -2,6 +2,7 @@
 """Build a browser tool using Python's standard library; no network required."""
 from html import escape
 import json
+import hashlib
 from pathlib import Path
 import re
 import shutil
@@ -44,6 +45,16 @@ def metadata(root=ROOT):
 
 def build(root=ROOT):
     tool = metadata(root)
+    raw = (root / 'data/index.json').read_bytes()
+    snapshot = json.loads(raw)
+    status = json.loads((root / 'data/status.json').read_text())
+    if (snapshot.get('schema_version') != 1 or not snapshot.get('parks')
+            or not isinstance(snapshot.get('advisories'), list)
+            or snapshot.get('checked_at') != status.get('checked_at')
+            or status.get('count') != len(snapshot['parks'])
+            or status.get('advisory_count') != len(snapshot['advisories'])
+            or hashlib.sha256(raw).hexdigest() != status.get('sha256')):
+        raise ValueError('Snapshot and source check do not match; refresh before publishing')
     output = root / "dist"
     if output.is_symlink():
         raise ValueError("dist must not be a symlink")
@@ -53,6 +64,9 @@ def build(root=ROOT):
     with tempfile.TemporaryDirectory(prefix="coolcode-tool-") as temporary:
         stage = Path(temporary) / "site"
         shutil.copytree(web, stage)
+        (stage / 'data').mkdir()
+        for filename in ['index.json', 'status.json']:
+            shutil.copyfile(root / 'data' / filename, stage / 'data' / filename)
         index = stage / "index.html"
         page = index.read_text(encoding="utf-8")
         for token, key in {"TITLE": "title", "DESCRIPTION": "description", "TOOL_ID": "id", "SOURCE_URL": "source"}.items():

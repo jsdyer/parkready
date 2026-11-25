@@ -1,16 +1,35 @@
 {
-  "id": "coolcode-tool-template",
-  "title": "CoolCode Tool Starter",
-  "description": "A browser-only example that trims lines and removes exact duplicates.",
-  "category": "security",
-  "tags": ["text", "lines", "duplicates"],
-  "icon": "scan-search",
-  "url": "/coolcode-tool-template/",
-  "source": "https://github.com/jsdyer/coolcode-tool-template",
+  "id": "parkready",
+  "title": "Park Ready",
+  "description": "Check BC park advisories, gate dates and facilities before you go. Search the full BC Parks catalogue and save a local visit plan.",
+  "category": "places",
+  "tags": [
+    "BC",
+    "parks",
+    "advisories",
+    "closures",
+    "camping",
+    "hiking",
+    "day trips",
+    "gate dates"
+  ],
+  "icon": "map",
+  "url": "/parkready/",
+  "source": "https://github.com/jsdyer/parkready",
   "hosting": "project",
   "access": "browser",
   "data_info": {
-    "mode": "local",
-    "detail": "The browser reads the text you paste and compares its lines."
+    "mode": "snapshot",
+    "detail": "The official BC Parks public catalogue supplies protected areas, published advisories, facility descriptions and year-specific gate dates. It does not determine that a park is open or safe.",
+    "cadence": "Hourly",
+    "probes": [
+      {
+        "url": "https://coolcode.ca/parkready/data/status.json",
+        "path": ["checked_at"],
+        "label": "Source checked",
+        "precision": "minute",
+        "count_at": { "path": ["count"], "unit": "protected areas" }
+      }
+    ]
   }
 }

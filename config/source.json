@@ -1,0 +1,8 @@
+{
+  "api_base": "https://bcparks.api.gov.bc.ca/api",
+  "page_size": 100,
+  "max_pages": 100,
+  "stale_after_hours": 6,
+  "default_examples": ["Golden Ears", "Alice Lake", "Rathtrevor", "Strathcona"],
+  "scope": "All displayed, legally active protected areas in the BC Parks public catalogue"
+}
