@@ -32,6 +32,7 @@ const link = (text, url, className) => {
   return a;
 };
 const para = (parent, text, cls) => parent.append(el("p", text, cls));
+const guidePaths = JSON.parse($("guide-paths").textContent);
 let dataset,
   parks = [],
   advisories = [],
@@ -214,6 +215,11 @@ function renderDetails() {
       ),
     ),
   );
+  if (guidePaths[p.id]) {
+    const guide = el("a", "Park visit guide");
+    guide.href = "./records/" + guidePaths[p.id] + "/";
+    actions.append(guide);
+  }
   if (p.coordinates)
     actions.append(
       link(

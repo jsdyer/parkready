@@ -1,0 +1,95 @@
+[
+  {
+    "slug": "lower-mainland",
+    "name": "Lower Mainland and Fraser Valley",
+    "intro": "Compare day-use entrances and facilities around Metro Vancouver, Maple Ridge and the Fraser Valley.",
+    "parks": {
+      "golden-ears-park": 8,
+      "cultus-lake-park": 41,
+      "rolley-lake-park": 122,
+      "sasquatch-park": 200,
+      "cypress-park": 278,
+      "mount-seymour-park": 15
+    }
+  },
+  {
+    "slug": "sea-to-sky",
+    "name": "Sea to Sky",
+    "intro": "Compare park access from Howe Sound through the Squamish and Pemberton areas. Gate notes and day-use pass information matter when planning an early start.",
+    "parks": {
+      "alice-lake-park": 90,
+      "garibaldi-park": 7,
+      "porteau-cove-park": 314,
+      "murrin-park": 141,
+      "shannon-falls-park": 331,
+      "brandywine-falls-park": 242,
+      "birkenhead-lake-park": 152,
+      "joffre-lakes-park": 363
+    }
+  },
+  {
+    "slug": "vancouver-island",
+    "name": "Vancouver Island",
+    "intro": "Compare water, picnic and toilet facilities for a day out, then read the park-specific details for your stop.",
+    "parks": {
+      "rathtrevor-beach-park": 193,
+      "englishman-river-falls-park": 29,
+      "miracle-beach-park": 45,
+      "elk-falls-park": 28,
+      "goldstream-park": 96,
+      "strathcona-park": 1,
+      "juan-de-fuca-park": 9398
+    }
+  },
+  {
+    "slug": "okanagan-and-southern-interior",
+    "name": "Okanagan and southern Interior",
+    "intro": "Compare lake access and camping services in the Okanagan, Thompson and Similkameen areas, including stops along Highway 3.",
+    "parks": {
+      "bear-creek-park": 307,
+      "ellison-park": 139,
+      "kalamalka-lake-park": 277,
+      "okanagan-lake-park": 54,
+      "shuswap-lake-park": 89,
+      "monck-park": 46,
+      "ec-manning-park": 33,
+      "cathedral-park": 199
+    }
+  },
+  {
+    "slug": "kootenays",
+    "name": "Kootenays",
+    "intro": "Look up lake access, campground facilities and seasonal details in the East and West Kootenays.",
+    "parks": {
+      "kokanee-creek-park": 52,
+      "kootenay-lake-park": 357,
+      "kikomun-creek-park": 235,
+      "mount-fernie-park": 105,
+      "moyie-lake-park": 108,
+      "norbury-lake-park": 98
+    }
+  },
+  {
+    "slug": "cariboo-and-north-thompson",
+    "name": "Cariboo, North Thompson and Mount Robson",
+    "intro": "Compare practical stops in the Cariboo and central Interior with mountain parks along Highways 5 and 16.",
+    "parks": {
+      "bowron-lake-park": 129,
+      "green-lake-park": 273,
+      "wells-gray-park": 24,
+      "mount-robson-park": 2,
+      "whiskers-point-park": 78
+    }
+  },
+  {
+    "slug": "northern-bc",
+    "name": "Northern British Columbia",
+    "intro": "Look up facilities and access notes before a northern road trip. Lakelse Lake is near Terrace. The Alaska Highway parks are farther east.",
+    "parks": {
+      "lakelse-lake-park": 70,
+      "liard-river-hot-springs-park": 92,
+      "muncho-lake-park": 93,
+      "stone-mountain-park": 94
+    }
+  }
+]

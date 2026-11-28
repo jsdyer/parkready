@@ -13,6 +13,7 @@ class BuildTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
+        shutil.copytree(ROOT / "config", self.root / "config")
         shutil.copytree(ROOT / "web", self.root / "web")
         shutil.copytree(ROOT / "data", self.root / "data")
         shutil.copyfile(ROOT / "tool.json", self.root / "tool.json")

@@ -736,3 +736,19 @@ dl.dates dd {
 .details a {
   overflow-wrap: anywhere;
 }
+
+.guide-hero-link { color: white; text-underline-offset: .22em; }
+.visit-guide { width: min(100%, 56rem); padding: 1.5rem clamp(1rem, 4vw, 3rem) 3rem; }
+.visit-guide h1 { font-size: clamp(2rem, 5vw, 3.3rem); line-height: 1.1; margin: .7rem 0; }
+.visit-guide .lead { font-size: 1.15rem; max-width: 62ch; }
+.visit-guide section { margin-top: 1.5rem; padding: 1rem clamp(1rem, 3vw, 1.6rem); background: white; border: 1px solid var(--line); border-radius: .75rem; }
+.visit-guide h2, .visit-guide h3 { margin: .25rem 0; }
+.visit-guide .edition { color: var(--muted); font-size: .94rem; }
+.stale-edition { display: block; color: var(--orange); font-weight: 650; }
+.visit-guide details { border-top: 1px solid var(--line); padding: .6rem 0; }
+.visit-guide summary { cursor: pointer; font-weight: 650; }
+.visit-guide .park-names, .visit-guide .stops { padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: .5rem 1rem; }
+.visit-guide .stops li { padding: .7rem 0; border-top: 1px solid var(--line); }
+.visit-guide .stops p { margin: .4rem 0; }
+.visit-guide .notice-list li { margin-bottom: .65rem; }
+.visit-guide p { overflow-wrap: anywhere; }

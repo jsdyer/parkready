@@ -9,6 +9,7 @@ import shutil
 import tempfile
 from urllib.parse import urlsplit
 
+from visit_guides import write_guides
 from search_metadata import add_search_metadata
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,8 +19,10 @@ SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 def metadata(root=ROOT):
     tool = json.loads((root / "tool.json").read_text(encoding="utf-8"))
     required = {"id", "title", "description", "category", "tags", "icon", "url", "source", "hosting", "access", "data_info"}
-    if not isinstance(tool, dict) or set(tool) != required:
+    if not isinstance(tool, dict) or set(tool) != required | {"result_directory"}:
         raise ValueError("tool.json has missing or unknown fields")
+    if tool["result_directory"].get("path") != "records/" or not tool["result_directory"].get("title"):
+        raise ValueError("Missing park guide directory")
     for key in required - {"tags", "data_info"}:
         if not isinstance(tool[key], str) or not tool[key].strip():
             raise ValueError(f"tool.json: {key} must be a nonempty string")
@@ -87,6 +90,7 @@ def build(root=ROOT):
             if placeholder not in page:
                 raise ValueError(f"Missing template placeholder: {placeholder}")
             page = page.replace(placeholder, markup if on_coolcode else "")
+        page = write_guides(stage, root, snapshot, tool, page, on_coolcode)
         if re.search(r"\{\{[A-Z_]+\}\}", page):
             raise ValueError("Unresolved template placeholder in web/index.html")
         page = add_search_metadata(page, tool)

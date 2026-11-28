@@ -25,11 +25,22 @@
     "probes": [
       {
         "url": "https://coolcode.ca/parkready/data/status.json",
-        "path": ["checked_at"],
+        "path": [
+          "checked_at"
+        ],
         "label": "Source checked",
         "precision": "minute",
-        "count_at": { "path": ["count"], "unit": "protected areas" }
+        "count_at": {
+          "path": [
+            "count"
+          ],
+          "unit": "protected areas"
+        }
       }
     ]
+  },
+  "result_directory": {
+    "path": "records/",
+    "title": "BC park visit guides and regional comparisons"
   }
 }

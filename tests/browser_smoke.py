@@ -56,6 +56,16 @@ def main():
                 page.locator('#reset').click();page.locator('#clear-saved').click();page.locator('#saved').check()
                 assert 'No matching parks' in page.locator('#list').inner_text()
                 page.locator('#reset').click();page.locator('#search').fill('Mount Robson');assert page.locator('.park-card').count()>0
+                guide_browser = browser.new_context(java_script_enabled=False, viewport={'width':320,'height':640})
+                static = guide_browser.new_page()
+                static.goto(f'http://127.0.0.1:{server.server_port}/parkready/')
+                static.get_by_role('link', name='Browse BC park visit guides by region').click()
+                static.get_by_role('link',name='Lower Mainland and Fraser Valley',exact=True).click()
+                static.get_by_role('link',name='Golden Ears Park',exact=True).click()
+                assert static.locator('h1').inner_text() == 'Golden Ears Park visit guide'
+                assert static.get_by_role('link',name='Check the official park page').get_attribute('href') == 'https://bcparks.ca/golden-ears-park/'
+                assert static.evaluate('document.documentElement.scrollWidth <= innerWidth')
+                guide_browser.close()
                 # A transport failure must not create an empty-but-apparently-healthy catalogue.
                 failed=context.new_page();failed.route('**/data/index.json',lambda route:route.fulfill(status=503,body='Unavailable'))
                 failed.goto(f'http://127.0.0.1:{server.server_port}/parkready/')
