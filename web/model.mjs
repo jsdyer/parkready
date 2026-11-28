@@ -24,6 +24,14 @@ export function relevant(advisory, date) {
   const ends = [advisory.end, advisory.expires].filter(Boolean).map(dateDay);
   return (!start || start <= date) && ends.every((end) => end >= date);
 }
+export function windowLabel(notice) {
+  if (!notice.relevant) return "Outside recorded dates";
+  const end = notice.end || notice.expires;
+  if (notice.effective && end) return "Window matches planning date";
+  if (notice.effective) return "End date unreported";
+  if (end) return "Effective date unreported";
+  return "Effective and end dates unreported";
+}
 export function parkNotices(park, advisories, date) {
   return advisories
     .filter((a) => a.parks.includes(park.id))
@@ -53,8 +61,10 @@ export function summary(park, advisories, date) {
   const top = [...notices].sort((a, b) => a.precedence - b.precedence)[0];
   if (top && top.access && top.access.toLowerCase() !== "open")
     return {
-      label: top.access,
-      kind: top.access_group === "Closed" ? "closed" : "attention",
+      label: top.effective && (top.end || top.expires)
+        ? top.access
+        : `${top.access} notice · incomplete dates`,
+      kind: top.effective && (top.end || top.expires) && top.access_group === "Closed" ? "closed" : "attention",
       count: notices.length,
     };
   if (outsideGateDates(park, date))
@@ -136,7 +146,7 @@ export function exportCSV(parks, advisories, date, checkedAt) {
     [
       "Park",
       "Type",
-      "Recorded notices for date",
+      "Published notices to review and their date coverage",
       "Gate dates for year",
       "Planning date",
       "Source checked",
@@ -147,7 +157,7 @@ export function exportCSV(parks, advisories, date, checkedAt) {
       p.type,
       parkNotices(p, advisories, date)
         .filter((a) => a.relevant)
-        .map((a) => a.title)
+        .map((a) => `${a.title} (${windowLabel(a)})`)
         .join(" | "),
       gateWindows(p, date)
         .map((d) => `${d.start} to ${d.end}`)
@@ -166,5 +176,5 @@ export function tripNotes(park, advisories, date, checkedAt) {
     gateWindows(park, date)
       .map((d) => `${d.start} to ${d.end}`)
       .join("\n") || "No complete gate dates listed for this year."
-  }\n${park.gate.note || ""}\n\nPublished notices:\n${notes.map((a) => `${a.relevant ? "Window matches planning date" : "Outside recorded window"}: ${a.title}\n${a.access || ""} · ${a.urgency}\n${a.description}`).join("\n\n") || "No published notices captured for this park. This does not confirm unrestricted access."}\n\nFacilities listed (availability may vary):\n${park.facilities.map((f) => f.name).join(", ")}`;
+  }\n${park.gate.note || ""}\n\nPublished notices:\n${notes.map((a) => `${windowLabel(a)}: ${a.title}\n${a.access || ""} · ${a.urgency}\n${a.description}`).join("\n\n") || "No published notices captured for this park. This does not confirm unrestricted access."}\n\nFacilities listed (availability may vary):\n${park.facilities.map((f) => f.name).join(", ")}`;
 }

@@ -95,21 +95,28 @@ def stamp(snapshot):
 def notices_block(items, when):
     matching = sorted((x for x in items if relevant(x, when)),
                       key=lambda x: (-x['urgency_rank'], x['precedence'], x['title'].casefold()))
-    body = ['<section><h2>Notices for the date checked</h2>']
+    body = ['<section><h2>Published notices to review</h2>']
     if matching:
-        body.append(f'<p>These published notices include {human_date(when)} in their recorded date windows. '
-                    'A notice can apply to one trail, entrance or campground.</p><ul class="notice-list">')
+        body.append(f'<p>As of {human_date(when)}, these park-specific notices either match the check date '
+                    'or have incomplete dates. Read the timing for each notice and confirm the affected area '
+                    'with BC Parks.</p><ul class="notice-list">')
         for notice in matching:
             dates = []
             for key, label in [('effective', 'Effective'), ('end', 'Ends'), ('expires', 'Expires')]:
                 if notice[key]:
                     dates.append(label + ' ' + human_date(day(notice[key])))
-            if not notice['end'] and not notice['expires']:
-                dates.append('End date unspecified')
+            if not dates:
+                dates.append('Effective and end dates unreported')
+            elif not notice['effective']:
+                dates.insert(0, 'Effective date unreported')
+            elif not (notice['end'] or notice['expires']):
+                dates.append('End date unreported')
+            if not notice['effective'] and (updated := notice.get('updated_at')):
+                dates.append('Bulletin updated ' + human_date(day(updated)))
             body.append(f'<li><strong>{escape(notice["title"])}</strong><br>{escape(" · ".join(dates))}</li>')
         body.append('</ul>')
     else:
-        body.append(f'<p>No park-specific notice in this edition has a date window covering {human_date(when)}. '
+        body.append(f'<p>No park-specific notice in this edition was found for review on {human_date(when)}. '
                     'Confirm current access and trail conditions with BC Parks before leaving.</p>')
     body.append(a(ADVISORIES, 'Check the official BC Parks advisories') + '</section>')
     return ''.join(body)

@@ -3,7 +3,7 @@
 A fast, free BC park planning check at **[coolcode.ca/parkready](https://coolcode.ca/parkready/)**. Search the complete displayed, legally active BC Parks catalogue by name, location notes or activity. Filter by facilities and recorded notices, select a planning date, save parks on your device, and download a visit plan or results CSV.
 
 <!-- coolcode:guide -->
-Browse [BC park visit guides by region](https://coolcode.ca/parkready/records/) to compare entrances and facilities. At Golden Ears, for example, the gate instructions distinguish seasonal hours from access-road restrictions. Choose a visit date in the planner to check notices for that day. Read the published notices and check the recorded gate dates before following the official park link. A facility listing is a description, not a guarantee that it is available. No notice does not mean open or safe. Save parks locally for next time, copy a shareable plan link, or download a dated planning snapshot. Check the source timestamp and the official page again before travelling.
+Browse BC park visit guides by region to compare entrances and facilities. At Golden Ears, for example, the gate instructions distinguish seasonal hours from access-road restrictions. Choose a visit date in the planner to check notices for that day. Read the published notices and check the recorded gate dates before following the official park link. A facility listing is a description, not a guarantee that it is available. No notice does not mean open or safe. Save parks locally for next time, copy a shareable plan link, or download a dated planning snapshot. Check the source timestamp and the official page again before travelling.
 <!-- /coolcode:guide -->
 
 ## What the data means
@@ -44,7 +44,9 @@ CHROMIUM_PATH=/usr/bin/google-chrome python3 tests/browser_smoke.py
 
 ## Permanent park visit guides
 
-The offline build joins reviewed destinations to the same source edition using BC Parks ORCS identifiers. Each region compares gate and facility records, and every park links to its official page, the date-aware planner and other destinations in its region. The guide shows notices whose effective and end dates cover the local date of the source check. The trip planner retains the other published notices. A park with no complete gate window for that operating year has no inferred season. The timestamp remains readable without JavaScript. The guide displays an additional age warning after the configured freshness interval when JavaScript is available.
+[Browse BC park visit guides by region](https://coolcode.ca/parkready/records/) or [open the Golden Ears park guide](https://coolcode.ca/parkready/records/golden-ears-park/).
+
+The offline build joins reviewed destinations to the same source edition using BC Parks ORCS identifiers. Each region compares gate and facility records, and every park links to its official page, the date-aware planner and other destinations in its region. The guide shows notices matching the local date of the source check and published notices with missing boundaries. Each notice identifies unreported dates; a bulletin update is labelled separately. The trip planner retains the other published notices. A park with no complete gate window for that operating year has no inferred season. The timestamp remains readable without JavaScript. The guide displays an additional age warning after the configured freshness interval when JavaScript is available.
 
 To include another destination, find its numeric `id` in `data/index.json` and add a permanent ASCII slug mapped to that ID in the appropriate group in `config/guides.json`. Keep existing slugs when BC Parks changes a displayed name. Only a destination present in the validated source edition produces a page and sitemap entry. Run the normal tests and build below, then push the change to main. The existing hourly Pages workflow refreshes both interactive and permanent pages together.
 

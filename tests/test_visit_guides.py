@@ -7,7 +7,7 @@ import unittest
 from xml.etree import ElementTree as ET
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from visit_guides import gates, hours, relevant, write_guides
+from visit_guides import gates, hours, notices_block, relevant, write_guides
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -19,6 +19,17 @@ class ParkGuides(unittest.TestCase):
         self.assertFalse(relevant(row, date(2026, 3, 4)))
         row['end'] = '2026-03-01'
         self.assertFalse(relevant(row, date(2026, 3, 2)))
+
+    def test_mixed_notice_dates_preserve_unknowns(self):
+        common = {'title':'Advisory', 'end':None, 'expires':None, 'effective':None,
+                  'precedence':2, 'urgency_rank':1, 'updated_at':'2026-04-01'}
+        html = notices_block([common, dict(common, end='2026-05-05'), dict(common, effective='2026-04-20'),
+                              dict(common, end='2026-03-31', title='Expired')], date(2026, 5, 1))
+        self.assertIn('Effective and end dates unreported', html)
+        self.assertIn('Effective date unreported · Ends May 5, 2026', html)
+        self.assertIn('End date unreported', html)
+        self.assertIn('Bulletin updated Apr 1, 2026', html)
+        self.assertNotIn('Expired', html)
 
     def test_prior_and_incomplete_dates_do_not_imply_a_season(self):
         park = {'dates': [

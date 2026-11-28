@@ -6,6 +6,7 @@ import {
   dateDay,
   validDate,
   relevant,
+  windowLabel,
   gateWindows,
   outsideGateDates,
   summary,
@@ -157,4 +158,16 @@ test("closure filter includes inaccessible parks and trails with official limite
       ).length,
       1,
     );
+});
+
+test("undated and partial bulletins remain visible with honest timing across exports and cards", () => {
+  const undated = {...notice, effective:null, end:null};
+  const endOnly = {...undated, end:"2026-09-09"};
+  assert.match(windowLabel({...undated, relevant:true}), /Effective and end dates unreported/);
+  assert.match(windowLabel({...endOnly, relevant:true}), /^Effective date unreported/);
+  assert.match(windowLabel({...notice, end:null, relevant:true}), /^End date unreported/);
+  assert.match(windowLabel({...endOnly, relevant:false}), /Outside recorded dates/);
+  assert.equal(summary(park, [undated], "2029-05-06").kind, "attention");
+  assert.match(exportCSV([park], [undated], "2029-05-06", "2026-11-28"), /Effective and end dates unreported/);
+  assert.match(tripNotes(park, [undated], "2029-05-06", "2026-11-28"), /Effective and end dates unreported/);
 });

@@ -7,6 +7,7 @@ import {
   parkNotices,
   summary,
   gateWindows,
+  windowLabel,
   exportCSV,
   tripNotes,
 } from "./model.mjs";
@@ -238,9 +239,11 @@ function renderDetails() {
   }
   const noticeSection = section("Published notices");
   const notes = parkNotices(p, advisories, filters.date);
+  const review = notes.filter((a) => a.relevant);
+  const matches = review.filter((a) => a.effective && (a.end || a.expires)).length;
   para(
     noticeSection,
-    `${notes.filter((a) => a.relevant).length} recorded windows match your planning date. Future conditions and unpublished changes cannot be predicted.`,
+    `Recorded windows covering your planning date: ${matches}. Additional published notices with incomplete dates to review: ${review.length - matches}.`,
     "small",
   );
   if (!notes.length)
@@ -258,9 +261,7 @@ function renderDetails() {
     box.append(
       el(
         "span",
-        a.relevant
-          ? "Window matches planning date"
-          : "Outside recorded date window",
+        windowLabel(a),
         `notice-window ${a.relevant ? "" : "muted"}`,
       ),
       el("h4", a.title),
